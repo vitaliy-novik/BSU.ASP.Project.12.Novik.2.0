@@ -1,0 +1,25 @@
+﻿@model IEnumerable<BLL.Interface.Entities.PhotoEntity>
+
+@if (Model.Count() == 0)
+{
+    <p>No results</p>
+}
+@foreach (var item in Model)
+{
+    <div class=" row">
+        <div class="col-md-8">
+            <figure>
+                @Html.Raw("<img class='img-responsive' Id src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(item.Image) + "\" />")
+                <figcaption>
+                    Nice: @item.likesNumber | 
+                    @item.LoadDate.ToShortDateString() |
+                    @item.Description
+                </figcaption>
+            </figure>
+            <hr />
+        </div>
+    </div>
+    
+}
+
