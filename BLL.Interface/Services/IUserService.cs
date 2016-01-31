@@ -17,9 +17,10 @@ namespace BLL.Interface.Services
         void DeleteUser(UserEntity user);
         bool IsUserExist(UserEntity user);
         void LoadPhoto(PhotoEntity photo, string login);
-        IEnumerable<PhotoEntity> FindPhotos(string login, string description = "");
+        IEnumerable<PhotoEntity> FindPhotos(string tag);
+        IEnumerable<PhotoEntity> FindPhotosByTag(string tag);
         IEnumerable<int> GetAllPhotosId(string login);
         PhotoEntity GetPhotoById(int id);
-        void AddLike(string login, int phId);
+        int AddLike(string login, int phId);
     }
 }

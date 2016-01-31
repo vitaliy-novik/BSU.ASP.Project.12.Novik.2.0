@@ -79,7 +79,45 @@
   // Attach event handlers to the new DOM elements. click click click
   Lightbox.prototype.build = function() {
     var self = this;
-    $('<div id="lightboxOverlay" class="lightboxOverlay"></div><div id="lightbox" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /><div class="lb-nav"><a class="lb-prev" href="" ></a><a class="lb-next" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
+    $('<div id="lightboxOverlay" class="lightboxOverlay"></div>' +
+      '<div id="lightbox" class="lightbox">' +
+          '<div class="lb-outerContainer">' +
+              '<div class="lb-container">' +
+                  '<img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />' +
+                  '<div class="lb-nav">' +
+                      '<a class="lb-prev" href="" ></a>' +
+                      '<a class="lb-next" href="" ></a>' +
+                  '</div>' +
+                  '<div class="lb-loader">' +
+                      '<a class="lb-cancel"></a>' +
+                  '</div>' +
+              '</div>' +
+          '</div>' +
+          '<div class="lb-dataContainer">' +
+              '<div class="lb-data">' +
+                  '<div class="lb-like">' +
+                      '<a href="" class="glyphicon glyphicon-heart-empty like" id="like"></a>' +
+                      '<span style="display: block; text-align: center; margin-top: 10px" class="lb-likes"></span>' +
+                  '</div>' +
+                  '<div class="lb-details">' +
+                      '<span class="lb-caption"></span>' +
+                      '<a href="" class="glyphicon glyphicon-edit" id="edit" style="margin-left: 10px;"></a>' +
+                      '<form method="post" action="/Album/Edit" id="edit-form" style="display: none">' +
+                          '<div class="input-group">' +
+                              '<input type="text" class="form-control" placeholder="Description" name="Description">' + 
+                              '<span class="input-group-btn">' +
+                                  '<button class="btn btn-default" type="submit">Go!</button>' +
+                              '</span>' +
+                          '</div>' +
+                      '</form>' +
+                      '<span class="lb-number"></span>' +
+                  '</div>' +
+                  '<div class="lb-closeContainer">' +
+                      '<a class="lb-close"></a>' +
+                  '</div>' +
+              '</div>' +
+          '</div>' +
+      '</div>').appendTo($('body'));
 
     // Cache jQuery objects
     this.$lightbox       = $('#lightbox');
@@ -135,6 +173,11 @@
       self.end();
       return false;
     });
+
+    this.$lightbox.find('#edit').on('click', function () {
+        $lightbox.find('.input-group').show();
+        return false;
+    });
   };
 
   // Show overlay and lightbox. If the image is part of a set, add siblings to album array.
@@ -156,7 +199,9 @@
     function addToAlbum($link) {
       self.album.push({
         link: $link.attr('href'),
-        title: $link.attr('data-title') || $link.attr('title')
+        title: $link.attr('data-title') || $link.attr('title'),
+        likes: $link.attr('data-likes') || $link.attr('likes'),
+        likeUrl: $link.attr('data-url')
       });
     }
 
@@ -375,6 +420,17 @@
             location.href = $(this).attr('href');
           }
         });
+    }
+    if (typeof this.album[this.currentImageIndex].likes !== 'undefined' &&
+    this.album[this.currentImageIndex].likes !== '') {
+        this.$lightbox.find('.lb-likes')
+          .text(this.album[this.currentImageIndex].likes)
+          .fadeIn('fast');
+    }
+    if (typeof this.album[this.currentImageIndex].likeUrl !== 'undefined' &&
+    this.album[this.currentImageIndex].likeUrl !== '') {
+        this.$lightbox.find('.like').attr('href', this.album[this.currentImageIndex].likeUrl)
+          .fadeIn('fast');
     }
 
     if (this.album.length > 1 && this.options.showImageNumberLabel) {

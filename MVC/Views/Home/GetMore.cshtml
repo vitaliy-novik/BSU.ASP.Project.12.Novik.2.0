@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MVC.Models.UserPreviewModel>
+
+
+@foreach (var item in Model)
+            {
+    <div class="row">
+        <p style="margin-left:20px">@Html.ActionLink(item.Name, "Index", "Album", new { id = item.Name }, null)</p>
+        @foreach (var i in item.Photos)
+        {
+            <div class='col-xs-6 col-md-3'>
+                <a href='/Album/Index/@item.Name' class='photoLink thumbnail' id='@i.Id'>
+                    <img src='/Album/ViewPhoto/@i.Id' />
+                </a>
+            </div>
+        }
+    </div>
+    <!--p>style = 'width:240px; height:240px;'</p-->
+        <hr />
+}

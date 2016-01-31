@@ -1,35 +1,73 @@
 ﻿@model IEnumerable<BLL.Interface.Entities.PhotoEntity>
+@using MVC.Infrastructure.Helpers
+
 
 @{
     ViewBag.Title = "Album";
 }
 
-<h2>Album</h2>
-
-<img id="loading" src="@Url.Content("~/Content/ajax-loader.gif")"
-     style="display: none" alt="loading..." />
-<div class="row" id="photoView" style="display: none">
-    <div class="row">
-        <div class="col-md-2">
-            @Html.ActionLink("Prev", "NextPhoto", new { id = -1 }, new { @class = "btn btn-primary btn-lg btn-block", @id = "prev" })
-        </div>
-        <div id="photoFrame"></div>
-        <div class="col-md-2">
-            @Html.ActionLink("Next", "NextPhoto", new { id = 1 }, new { @class = "btn btn-primary btn-lg btn-block", @id = "next"})
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width:360px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="mySmallModalLabel">Load Photo</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("LoadPhoto", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group">
+                        <label for="login">Description</label>
+                        <input type="text" class="form-control" id="description" name="Description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">File</label>
+                        <input type="file" multiple="multiple" name="files" class="form-control" />                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                }
+            </div>
         </div>
     </div>
-    <hr />
 </div>
-<p>
-    @Html.ActionLink("Add Photo", "LoadPhoto", "Profile", null, null)
-</p>
-@foreach (var item in Model) {
-    @Html.Raw("<a href='/Album/ViewPhoto/" + item.Id + "' data-lightbox='roadtrip' class='photoLink' id='" + item.Id
-    + "'><img style='width:240px; height:240px;' src=\"data:image/jpeg;base64,"
-                                + Convert.ToBase64String(item.Image) + "\" /></a>")
-}
 
+
+<div style="text-align:center;">
+    <h2>@ViewBag.Login</h2>
+</div>
+
+<p>
+    @if (ViewBag.IsMy)
+    {
+        <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Add Photo</a>
+    }
+</p>
+<div class="row user-list">
+    @foreach (var item in Model)
+    {
+        @Html.Raw("<div class='col-md-3'><a href='/Album/ViewPhoto/" + item.Id +
+    "' data-lightbox='roadtrip' data-title='" + Html.ParseTags(item.Description) +
+    "' data-likes='" + item.likesNumber +
+    "' data-url='/Album/AddLike/" + item.Id +
+    "' class='photoLink thumbnail' style='margin-bottom:20px; height: 180px;' id='" + item.Id +
+    "'><img src=\"data:image/jpeg;base64," +
+    Convert.ToBase64String(item.Image) +
+    "\" /></a></div>")
+    }
+
+</div>
+<div style="text-align:center">
+    <img id="loading" src="../images/loading.gif" style="display:none;" />
+</div>
+@if (ViewBag.MaxPage > ViewBag.Page)
+{
+    <div style="text-align:center">
+        @Html.ActionLink("More", "GetMore", "Album", new { id = ViewBag.Login, page = ViewBag.Page + 1 },
+            new { @class = "btn btn-lg btn-success more", page = ViewBag.Page + 1, maxPage = ViewBag.MaxPage })
+    </div>
+}
 @section scripts{
-    <!--Scripts.Render("~/scripts/PhotoView.js")-->
     @Scripts.Render("~/scripts/lightbox.js")
+    @Scripts.Render("~/scripts/PhotoView.js")
 }

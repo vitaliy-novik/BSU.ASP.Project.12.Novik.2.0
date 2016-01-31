@@ -28,18 +28,45 @@ namespace MVC.Controllers
             string login = id;
             if (id == null)
                 login = User.Identity.Name;
-            isMy = login == User.Identity.Name;
-            List<PhotoEntity> album = new List<PhotoEntity>(userService.FindPhotos(login));
-            photoIdList = new List<int>(userService.GetAllPhotosId(login));
+            ViewBag.IsMy = login == User.Identity.Name;
+            ViewBag.Login = login;
+            int pageSize = 4;
+            var photos = userService.FindPhotos(login);
+            int n = photos.Count();
+            int mp = n / pageSize;
+            if (n % pageSize > 0)
+                mp++;
+            ViewBag.MaxPage = mp;
+            ViewBag.Page = 1;
+            List<PhotoEntity> album = new List<PhotoEntity>(photos.Take(pageSize));
+            //photoIdList = new List<int>(userService.GetAllPhotosId(login));
 
             return View(album);
         }
 
-        public ActionResult AddLike(int? id)
+        public ActionResult GetMore(string id, int? page)
         {
-            if (id != null)
-                userService.AddLike(User.Identity.Name, id.Value);
-            return Redirect("/Album/ViewPhoto/" + id);
+            string login = id;
+            if (id == null)
+                login = User.Identity.Name;
+            int pageSize = 4;
+            var photos = userService.FindPhotos(login).Skip((page.Value - 1) * pageSize);
+            List<PhotoEntity> album = new List<PhotoEntity>(photos.Take(pageSize));
+            return PartialView(album);
+        }
+
+        public ActionResult OneByOne(string id)
+        {
+            string login = id;
+            if (id == null)
+                login = User.Identity.Name;
+            photoIdList = new List<int>(userService.GetAllPhotosId(login));
+            return View(photoIdList);
+        }
+
+        public int AddLike(int? id)
+        {             
+            return userService.AddLike(User.Identity.Name, id.Value);
         }
 
         public ActionResult NextPhoto(int id)
@@ -63,17 +90,11 @@ namespace MVC.Controllers
 
         }
 */
+        [AllowAnonymous]
         public FileResult ViewPhoto(int? id)
         {
             ViewBag.IsMy = isMy;
-            if (id == null)
-            {
-                id = photoIdList[0];
-                current = 0;
-            }
-            else
-                current = photoIdList.IndexOf(id.Value);
-            PhotoEntity photo = userService.GetPhotoById(photoIdList[current]);
+            PhotoEntity photo = userService.GetPhotoById(id.Value);
             return File(photo.Image, "image/jpeg");
 
         }

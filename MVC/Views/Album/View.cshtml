@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+<img id="loading" src="@Url.Content("~/Content/ajax-loader.gif")"
+     style="display: none" alt="loading..." />
+<div class="row" id="photoView" style="display: none">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("Prev", "NextPhoto", new { id = -1 }, new { @class = "btn btn-primary btn-lg btn-block", @id = "prev" })
+        </div>
+        <div id="photoFrame"></div>
+        <div class="col-md-2">
+            @Html.ActionLink("Next", "NextPhoto", new { id = 1 }, new { @class = "btn btn-primary btn-lg btn-block", @id = "next" })
+        </div>
+    </div>
+    <hr />
+</div>

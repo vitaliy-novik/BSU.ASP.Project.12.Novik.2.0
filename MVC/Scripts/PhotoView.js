@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('.photoLink').click(function (e) {
+/*    $('.photoLink').click(function (e) {
         e.preventDefault();
         var url = $(this).attr('href');        
         $('#photoFrame').load(url);
@@ -15,9 +15,32 @@
         var url = $(this).attr('href');
         $('#photoFrame').load(url);
     });
-    $('#like').click(function (e) {
+    */
+
+    $('.like').click(function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
-        $('#photoFrame').load(url);
+        $('.lb-likes').load(url);
+    });
+    $('#edit').click(function (e) {
+        e.preventDefault();
+        $('#edit-form').show;
+    });
+    $('.more').click(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $(this).hide();
+        $("#loading").show();
+        $.get(url, function (response) {
+            $("#loading").hide();
+            $('.user-list').append(response);
+            var a = parseInt($(".more").attr("page"));
+            a = a + 1;
+            if (a <= $(".more").attr("maxPage")) {
+                $(".more").show();
+                $(".more").attr("page", a);
+                $(".more").attr("href", "/Home/GetMore?page=" + a);
+            }            
+        });
     });
 });

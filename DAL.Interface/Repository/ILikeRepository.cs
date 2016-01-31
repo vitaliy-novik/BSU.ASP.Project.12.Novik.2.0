@@ -9,5 +9,6 @@ namespace DAL.Interface.Repository
 {
     public interface ILikeRepository : IRepository<DalLike>
     {
+        int CountLikes(int id);
     }
 }

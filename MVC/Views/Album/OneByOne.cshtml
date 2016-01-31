@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "OneByOne";
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class='col-md-3'>
+            <a href='/Album/ViewPhoto/@item' data-lightbox='roadtrip' class='photoLink thumbnail' style='margin-bottom:20px; height: 180px;'>
+            <img src='/Album/ViewPhoto/@item'  />
+            </a>
+        </div>
+    }
+</div>

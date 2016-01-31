@@ -55,7 +55,7 @@ namespace MVC.Controllers
         {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("SignIn", "Account");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

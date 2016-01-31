@@ -153,6 +153,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Helpers\TagHelper.cs" />
     <Compile Include="Infrastructure\Mappers\PhotoMappers.cs" />
     <Compile Include="Infrastructure\Mappers\ProfileMappers.cs" />
     <Compile Include="Infrastructure\Mappers\UserMappers.cs" />
@@ -218,6 +219,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
+    <Content Include="Views\Home\GetMore.cshtml" />
+    <Content Include="Views\Album\OneByOne.cshtml" />
+    <Content Include="Views\Album\View.cshtml" />
+    <Content Include="Views\Album\GetMore.cshtml" />
+    <Content Include="Views\Search\Find.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL.Interface\BLL.Interface.csproj">

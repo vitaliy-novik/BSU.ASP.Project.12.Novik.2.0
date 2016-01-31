@@ -78,9 +78,9 @@ namespace BLL.Services
             uow.Commit();
         }
 
-        public IEnumerable<PhotoEntity> FindPhotos(string login, string description = "")
+        public IEnumerable<PhotoEntity> FindPhotos(string login)
         {
-            return uow.Photos.FindPhoto(login, description).Select(p => p.ToBllPhoto());
+            return uow.Photos.FindPhoto(login).Select(p => p.ToBllPhoto());
         }
 
         public IEnumerable<int> GetAllPhotosId(string login)
@@ -94,7 +94,7 @@ namespace BLL.Services
             return uow.Photos.GetById(id).ToBllPhoto();
         }
 
-        public void AddLike(string login, int phId)
+        public int AddLike(string login, int phId)
         {
             uow.Likes.Create(new DalLike
             {
@@ -102,7 +102,12 @@ namespace BLL.Services
                 PhotoId = phId
             });
             uow.Commit();
+            return uow.Likes.CountLikes(phId);
         }
 
+        public IEnumerable<PhotoEntity> FindPhotosByTag(string tag)
+        {
+            return uow.Photos.FindByTag(tag).Select(p => p.ToBllPhoto());
+        }
     }
 }

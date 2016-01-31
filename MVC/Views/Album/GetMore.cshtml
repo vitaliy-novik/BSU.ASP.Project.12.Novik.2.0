@@ -1,0 +1,14 @@
+﻿@model IEnumerable<BLL.Interface.Entities.PhotoEntity>
+@using MVC.Infrastructure.Helpers
+
+@foreach (var item in Model)
+{
+    @Html.Raw("<div class='col-md-3'><a href='/Album/ViewPhoto/" + item.Id +
+    "' data-lightbox='roadtrip' data-title='" + Html.ParseTags(item.Description) +
+    "' data-likes='" + item.likesNumber +
+    "' data-url='/Album/AddLike/" + item.Id +
+    "' class='photoLink thumbnail' style='margin-bottom:20px; height: 180px;' id='" + item.Id +
+    "'><img src=\"data:image/jpeg;base64," +
+    Convert.ToBase64String(item.Image) +
+    "\" /></a></div>")
+}

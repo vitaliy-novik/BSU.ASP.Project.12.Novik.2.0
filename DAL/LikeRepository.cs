@@ -21,19 +21,28 @@ namespace DAL
             this.context = dc;
         }
 
+        public int CountLikes(int id)
+        {
+            Photo photo = context.Set<Photo>().FirstOrDefault(p => p.Id == id);
+            return photo.Likes.Count();
+        }
+
         public void Create(DalLike e)
         {
             User user = context.Set<User>().FirstOrDefault(u => u.Login == e.Login);
             Photo photo = context.Set<Photo>().FirstOrDefault(p => p.Id == e.PhotoId);
             user.Profile = null;
-            Like like = new Like
-            {
-                User = user,
-                Photo = photo
-            };
-            if (context.Set<Like>().FirstOrDefault(l => 
-            l.Photo.Id == photo.Id && l.User.Id == user.Id) == null) 
-                context.Set<Like>().Add(like);
+            Like like = context.Set<Like>()
+                .FirstOrDefault(l => l.Photo.Id == photo.Id && l.User.Id == user.Id);
+            if (like == null)
+                context.Set<Like>().Add(new Like
+                {
+                    User = user,
+                    Photo = photo
+                });
+            else
+                context.Set<Like>().Remove(like);
+                
         }
 
         public void Delete(DalLike e)

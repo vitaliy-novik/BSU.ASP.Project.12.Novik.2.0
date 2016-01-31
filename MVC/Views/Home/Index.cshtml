@@ -3,29 +3,70 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Users:</h2>
-@foreach (var item in Model)
-{
-    <div class="row">
-        <p style="margin-left:20px">@Html.ActionLink(item.Name, "Index", "Album", new { id = item.Name }, null)</p>
-        @foreach (var i in item.Photos)
-        {
-            @Html.Raw("<div class='col-xs-6 col-md-3'>" + 
-                "<a href='/Album/Index/" + item.Name + "' class='photoLink thumbnail' style='padding:0px' id='" + i.Id
-                + "'><img style='width:240px; height:240px;' src=\"data:image/jpeg;base64,"
-                                + Convert.ToBase64String(i.Image) + "\" /></a></div>")
-        }
-    </div>
-<div class="row">
-    <div class="col-md-12">
-        <p>@Html.ActionLink(item.Name, "Index", "Album", new { id = item.Name }, null)</p>
-        @foreach (var i in item.Photos)
-        {
-            @Html.Raw("<a href='/Album/Index/" + item.Name + "' class='photoLink' id='" + i.Id
-                + "'><img style='width:240px; height:240px;' src=\"data:image/jpeg;base64,"
-                                + Convert.ToBase64String(i.Image) + "\" /></a>")
-        }
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width:360px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button> 
+                <h4 class="modal-title" id="mySmallModalLabel">Sign in</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("SignIn", "Account", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input type="text" class="form-control" id="login" name="Login" placeholder="Login">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="RememberMe"> Remember Me
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">Sign in</button>
+                    <span> or @Html.ActionLink("Register", "Registration", "Account")</span>
+                }
+            </div>
+        </div>
     </div>
 </div>
-    <hr/>
+
+<h2 style="text-align:center;">Top</h2>
+<div class="user-list">
+    @foreach (var item in Model)
+            {
+        <div class="row">
+            <p style="margin-left:20px">@Html.ActionLink(item.Name, "Index", "Album", new { id = item.Name }, null)</p>
+            @foreach (var i in item.Photos)
+            {
+                <div class='col-xs-6 col-md-3'>
+                    <a href='/Album/Index/@item.Name' class='photoLink thumbnail' id='@i.Id'>
+                        <img src='/Album/ViewPhoto/@i.Id' />
+                    </a>
+                </div>
+            }
+        </div>
+    <!--p>style = 'width:240px; height:240px;'</p-->
+        <hr />
+    }
+    
+</div>
+<div style="text-align:center">
+    <img id="loading" src="../images/loading.gif" style="display:none;" />
+</div>
+@if (ViewBag.MaxPage > ViewBag.Page)
+{
+    <div style="text-align:center">
+        @Html.ActionLink("More", "GetMore", "Home", new { page = ViewBag.Page + 1 },
+            new { @class = "btn btn-lg btn-success more", page = ViewBag.Page + 1, maxPage = ViewBag.MaxPage })
+    </div>
+}
+
+@section scripts{
+    @Scripts.Render("~/scripts/PhotoView.js")
 }

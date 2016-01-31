@@ -39,9 +39,24 @@ namespace DAL
             throw new NotImplementedException();
         }
 
-        public IEnumerable<DalPhoto> FindPhoto(string login, string description = "")
+        public IEnumerable<DalPhoto> FindByTag(string tag)
         {
-            return context.Set<Photo>().Where(p => p.User.Login.ToUpper() == login.ToUpper() 
+            return context.Set<Photo>().Where(p => p.Description.Contains(tag)
+            //&& p.Description.ToUpper().Contains(description.ToUpper())
+            ).Select(photo => new DalPhoto()
+            {
+                Id = photo.Id,
+                Image = photo.Image,
+                Description = photo.Description,
+                LoadDate = photo.LoadDate,
+                UserId = photo.User.Id,
+                LikesCount = photo.Likes.Count
+            });
+        }
+
+        public IEnumerable<DalPhoto> FindPhoto(string login)
+        {
+            return context.Set<Photo>().Where(p => p.User.Login.ToUpper() == login.ToUpper()
             //&& p.Description.ToUpper().Contains(description.ToUpper())
             ).Select(photo => new DalPhoto()
                 {

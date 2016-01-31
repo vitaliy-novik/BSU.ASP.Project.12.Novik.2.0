@@ -12,6 +12,7 @@ namespace DAL.Interface.Repository
     {
         IEnumerable<int> GetAllPhotosId(int userId);
         IEnumerable<DalPhoto> GetAllByPredicate(Expression<Func<DalPhoto, bool>> f);
-        IEnumerable<DalPhoto> FindPhoto(string login, string description = "");
+        IEnumerable<DalPhoto> FindPhoto(string login);
+        IEnumerable<DalPhoto> FindByTag(string tag);
     }
 }
