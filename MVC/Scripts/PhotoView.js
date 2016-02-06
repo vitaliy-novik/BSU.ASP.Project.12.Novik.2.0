@@ -39,7 +39,9 @@
             if (a <= $(".more").attr("maxPage")) {
                 $(".more").show();
                 $(".more").attr("page", a);
-                $(".more").attr("href", "/Home/GetMore?page=" + a);
+                var href = $(".more").attr("href");
+                href = href.split("=", 2)[0] + "=" + a;
+                $(".more").attr("href", href);
             }            
         });
     });
